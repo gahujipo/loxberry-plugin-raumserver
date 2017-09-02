@@ -1,1 +1,2 @@
 # loxberry-plugin-raumserver
+This LoxBerry plugin automates the installation of NodeJS and [node-raumserver](https://github.com/ChriD/node-raumserver) on the LoxBerry. For further details check the [LoxWiki Plugin page](http://www.loxwiki.eu/display/LOXBERRY/Raumserver).

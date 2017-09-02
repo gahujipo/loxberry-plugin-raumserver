@@ -1,0 +1,49 @@
+#!/bin/sh
+
+# This is a sample DAEMON file which is started at boottime. iIt must be names
+# "start" here and will be renamed according to your Pluginname during
+# installation. CAUTION! MAKE SURE YOUR SCRIPT EXITS CLEANLY! It is a good idea
+# to start your daemon as background process. If you do something wrong here
+# your user's systems may hang forever during boottime!
+
+# Will be executed as user "root".
+
+# Name this file "daemon.sh" in your plugin-archive. It will be renamed to NAME
+# during installation
+
+if [ -x /usr/bin/logger ]
+then
+    /usr/bin/logger "This is just a sample DAEMON script from Sample Plugin"
+fi
+
+
+if [ ! -f /etc/apt/sources.list.d/nodesource.list ]
+then 
+    # Nodejs current is recommended as of
+    #  https://github.com/ChriD/node-raumserver#requirements
+    curl -sL https://deb.nodesource.com/setup_8.x | bash
+fi
+
+# Test if nodejs is installed otherwise install it: 
+if [ `which nodejs > /dev/null; echo $?` -ne 0 ]
+then 
+    apt-get -y install nodejs
+fi
+
+if [ -d '/opt/loxberry/data/plugins/raumserver' ]
+then 
+    # change to raumserver folder
+    cd /opt/loxberry/data/plugins/raumserver
+    
+    #check if raumserver already installed
+    if [ `npm list | grep -c "node-raumserver"` -ne 1 ]
+    then
+        # otherwise install the server
+        npm install github:ChriD/node-raumserver
+    fi
+
+    #run the server: 
+    node node_modules/node-raumserver/raumserver.js
+fi
+
+exit 0
