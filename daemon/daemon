@@ -11,23 +11,23 @@
 # Name this file "daemon.sh" in your plugin-archive. It will be renamed to NAME
 # during installation
 
-if [ -x /usr/bin/logger ]
-then
-    /usr/bin/logger "This is just a sample DAEMON script from Sample Plugin"
-fi
-
-
-if [ ! -f /etc/apt/sources.list.d/nodesource.list ]
-then 
-    # Nodejs current is recommended as of
-    #  https://github.com/ChriD/node-raumserver#requirements
-    curl -sL https://deb.nodesource.com/setup_8.x | bash
-fi
-
 # Test if nodejs is installed otherwise install it: 
 if [ `which nodejs > /dev/null; echo $?` -ne 0 ]
 then 
-    apt-get -y install nodejs
+    if [ `grep Hardware /proc/cpuinfo | grep -E -c 'BCM[0-9]+'` -eq 1 ]
+    then 
+        cd /tmp/
+        wget -O - https://raw.githubusercontent.com/audstanley/NodeJs-Raspberry-Pi/master/Install-Node.sh | bash
+    else 
+        if [ ! -f /etc/apt/sources.list.d/nodesource.list ]
+        then 
+            /usr/bin/logger "Raumserver installation: nodesources repo not installed. Starting installation now."
+            # Nodejs current is recommended as of
+            #  https://github.com/ChriD/node-raumserver#requirements
+            curl -sL https://deb.nodesource.com/setup_8.x | bash
+            apt-get -y install nodejs
+        fi
+    fi
 fi
 
 if [ -d '/opt/loxberry/data/plugins/raumserver' ]
@@ -38,12 +38,22 @@ then
     #check if raumserver already installed
     if [ `npm list | grep -c "node-raumserver"` -ne 1 ]
     then
+        /usr/bin/logger "Raumserver installation: node module raumserver not instlled. Starting installation now."
         # otherwise install the server
         npm install github:ChriD/node-raumserver
     fi
 
+    /usr/bin/logger "Raumserver: starting."
     #run the server: 
-    node node_modules/node-raumserver/raumserver.js
+    cd /opt/loxberry/data/plugins/raumserver/node_modules/node-raumserver/
+    node raumserver.js
+
+    if [ `ps ax | grep -v grep | grep -c raumserver.js` -eq 1 ]
+    then
+        /usr/bin/logger "Raumserver: Start successful."
+    else
+        /usr/bin/logger "Raumserver: Start failed."
+    fi
 fi
 
 exit 0
