@@ -14,7 +14,7 @@
 # Test if nodejs is installed otherwise install it: 
 if [ `which nodejs > /dev/null; echo $?` -ne 0 ]
 then 
-    if [ `grep Hardware /proc/cpuinfo | grep BCM2708 | wc -l` -eq 1 ]
+    if [ `grep Hardware /proc/cpuinfo | grep -E -c 'BCM[0-9]+'` -eq 1 ]
     then 
         cd /tmp/
         wget -O - https://raw.githubusercontent.com/audstanley/NodeJs-Raspberry-Pi/master/Install-Node.sh | bash
