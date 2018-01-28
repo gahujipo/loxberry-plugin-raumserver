@@ -11,6 +11,12 @@
 # Name this file "daemon.sh" in your plugin-archive. It will be renamed to NAME
 # during installation
 
+# wait for DNS readiness
+until $(curl --output /dev/null --silent --head --fail http://nodejs.org); do
+    printf '.'
+    sleep 5
+done
+
 # Test if nodejs is installed otherwise install it: 
 if [ `which nodejs > /dev/null; echo $?` -ne 0 ] || [ `which npm > /dev/null; echo $?` -ne 0 ]
 then 
