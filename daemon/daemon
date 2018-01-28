@@ -12,7 +12,7 @@
 # during installation
 
 # Test if nodejs is installed otherwise install it: 
-if [ `which nodejs > /dev/null; echo $?` -ne 0 ]
+if [ `which nodejs > /dev/null; echo $?` -ne 0 ] || [ `which npm > /dev/null; echo $?` -ne 0 ]
 then 
     if [ `grep Hardware /proc/cpuinfo | grep -E -c 'BCM[0-9]+'` -eq 1 ]
     then 
