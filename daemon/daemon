@@ -73,7 +73,7 @@ then
     /usr/bin/logger "Raumserver: starting."
     #run the server: 
     cd /opt/loxberry/data/plugins/raumserver/node_modules/node-raumserver/
-    node raumserver.js
+    node raumserver.js &
 
     if [ `ps ax | grep -v grep | grep -c raumserver.js` -eq 1 ]
     then
