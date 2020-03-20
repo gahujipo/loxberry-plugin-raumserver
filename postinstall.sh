@@ -20,8 +20,32 @@
 # <ERROR> This is an error!"
 # <FAIL> This is a fail!"
 
-echo "<WARN> You need to reboot Loxberry in order to complete the installation"
-echo "<WARN> Loxberry muss neu gestartet werden um die Installation abzuschliessen."
+if [ -d '/opt/loxberry/data/plugins/raumserver' ]
+then 
+    # change to raumserver folder
+    cd /opt/loxberry/data/plugins/raumserver
+    
+    #check if raumserver already installed
+    if [ `npm list | grep -c "node-raumserver"` -ne 1 ]
+    then
+        /usr/bin/logger "Raumserver installation: node module raumserver not instlled. Starting installation now."
+        # otherwise install the server
+        npm install github:ChriD/node-raumserver
+    fi
+
+    /usr/bin/logger "Raumserver: starting."
+    #run the server: 
+    cd /opt/loxberry/data/plugins/raumserver/node_modules/node-raumserver/
+    node raumserver.js &
+
+    if [ `ps ax | grep -v grep | grep -c raumserver.js` -eq 1 ]
+    then
+        /usr/bin/logger "Raumserver: Start successful."
+    else
+        /usr/bin/logger "Raumserver: Start failed."
+    fi
+fi
+
 
 # Exit with Status 0
 exit 0

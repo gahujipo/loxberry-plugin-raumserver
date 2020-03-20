@@ -11,31 +11,14 @@
 # Name this file "daemon.sh" in your plugin-archive. It will be renamed to NAME
 # during installation
 
+cd /opt/loxberry/data/plugins/raumserver/node_modules/node-raumserver/
+node raumserver.js &
 
-if [ -d '/opt/loxberry/data/plugins/raumserver' ]
-then 
-    # change to raumserver folder
-    cd /opt/loxberry/data/plugins/raumserver
-    
-    #check if raumserver already installed
-    if [ `npm list | grep -c "node-raumserver"` -ne 1 ]
-    then
-        /usr/bin/logger "Raumserver installation: node module raumserver not instlled. Starting installation now."
-        # otherwise install the server
-        npm install github:ChriD/node-raumserver
-    fi
-
-    /usr/bin/logger "Raumserver: starting."
-    #run the server: 
-    cd /opt/loxberry/data/plugins/raumserver/node_modules/node-raumserver/
-    node raumserver.js &
-
-    if [ `ps ax | grep -v grep | grep -c raumserver.js` -eq 1 ]
-    then
-        /usr/bin/logger "Raumserver: Start successful."
-    else
-        /usr/bin/logger "Raumserver: Start failed."
-    fi
+if [ `ps ax | grep -v grep | grep -c raumserver.js` -eq 1 ]
+then
+    /usr/bin/logger "Raumserver: Start successful."
+else
+    /usr/bin/logger "Raumserver: Start failed."
 fi
 
 exit 0
