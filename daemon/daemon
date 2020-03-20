@@ -11,7 +11,7 @@
 # Name this file "daemon.sh" in your plugin-archive. It will be renamed to NAME
 # during installation
 
-cd /opt/loxberry/data/plugins/raumserver/node_modules/node-raumserver/
+cd $LBPDATA/raumserver/node_modules/node-raumserver/
 node raumserver.js &
 
 if [ `ps ax | grep -v grep | grep -c raumserver.js` -eq 1 ]
