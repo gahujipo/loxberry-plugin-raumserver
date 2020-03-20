@@ -69,7 +69,7 @@ then
         NODEFOLDER=$(echo $LINKTONODE | sed 's/.tar.gz/\//');
         #Next, Creates directory for downloads, and downloads node 8.x
         cd /tmp && mkdir tempNode && cd tempNode && wget https://nodejs.org/dist/latest-v9.x/$LINKTONODE;
-        tar -xzf $LINKTONODE; &&
+        tar -xzf $LINKTONODE;
         #Remove the tar after extracing it.
         rm $LINKTONODE;
         #remove older version of node:
@@ -97,6 +97,9 @@ then
             apt-get -y install nodejs && exit 0
         fi
     fi
+else
+    # when node and npm are already installed
+    exit 0
 fi
 
 exit 2
