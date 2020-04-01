@@ -1,0 +1,27 @@
+#!/usr/bin/php
+<?php
+
+# First line: Description
+echo "Checks if the raumserver is running\n";
+ 
+if( $argv[1] == "title" ) {
+    exit();
+}
+
+try {
+    $returnval = @exec("ps ax | grep -v grep | grep -c raumserver.js");
+    if($returnval === "1")
+    {
+        echo "5\n";  # Second line: Status
+        echo "raumserver is running.";  # Third line: Test result
+        exit();
+    }
+
+     echo "3\n";  # Second line: Status
+     echo "raumserver is not running.";  # Third line: Test result
+}
+catch(exception $e)
+{
+    echo "0\n";  # Second line: Status
+    echo "exception occurred";  # Third line: Test result
+}
